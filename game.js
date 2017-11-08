@@ -4,36 +4,48 @@ var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS,
 function preload() {
     game.load.image('player1', 'assets/sprites/player1.png');
     game.load.image('player2', 'assets/sprites/player2.png');
-    game.load.image('ball', 'assets/sprites/ball.png');
+    game.load.image('ball', 'assets/sprites/Ball.png');
 }
 
 var sprite;
 
 function create() {
-
+        game.physics.startSystem(Phaser.Physics.ARCADE);
     game.stage.backgroundColor = '#111';
+    cursors = game.input.keyboard.createCursorKeys();
 
     player = game.add.sprite(100, window.innerHeight / 2, 'player1');
     player.x = 100;
     player.y = window.innerHeight/2;
     //player.arrow =  game.add.sprite(100, window.innerHeight / 2, 'arrow');
     player.anchor.setTo(0.5, 0.5);
+    player.enableBody = true;
     //player.angle = -45;
     player.turning = true;
     player.hasBall = false;
 
     var ball = game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'ball');
-
+        game.physics.enable(player, Phaser.Physics.ARCADE);
 }
 
 function update() {
-    
+    player.body.velocity.y = 0;
+    if (cursors.down.isDown)
+    {
+      player.body.velocity.y = 500;
+    }
+
+    if (cursors.up.isDown)
+    {
+      player.body.velocity.y = -500;
+    }
+
     if(player.turning === true && player.hasBall === true) {
       player.angle += 4;
     } else if(player.turning === false && player.hasBall === true) {
       player.angle -= 4;
     }
-  
+
     if(player.angle > 45 && player.hasBall === true) {
       player.turning = false;
     } else if(player.angle < -45 && player.hasBall === true) {
